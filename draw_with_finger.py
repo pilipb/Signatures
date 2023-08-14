@@ -33,7 +33,7 @@ rindex = 0
 yindex = 0
 
 # colours in BGR format
-colours = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (0, 255, 255)]
+colours = [(0, 0, 0, 255), (0, 255, 0, 255), (0, 0, 255, 255), (0, 255, 255, 255)]
 colourIndex = 0
 
 # create a blank white image
@@ -41,7 +41,12 @@ colourIndex = 0
 success, temp = cap.read()
 xpix = temp.shape[0]
 ypix = temp.shape[1]
+
 paintWindow = np.zeros((xpix, ypix, 3)) + 255
+# make paintWindow transparent
+paintWindow = paintWindow.astype('uint8')
+paintWindow = cv2.cvtColor(paintWindow, cv2.COLOR_BGR2BGRA)
+paintWindow[:, :, 3] = 0
 
 while True:
     success, img = cap.read()
@@ -63,6 +68,9 @@ while True:
     cv2.putText(img, "GREEN", (298, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
     cv2.putText(img, "RED", (420, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
     cv2.putText(img, "YELLOW", (520, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (150, 150, 150), 2, cv2.LINE_AA)
+
+    # add a caption that says press 'q' to quit
+    cv2.putText(img, "Press 'cmd q' to quit / 'cmd s' to save", (10, 450), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 2, cv2.LINE_AA)
 
     # determine which pixels fall within the blue boundaries and then blur the binary image
     blueMask = cv2.inRange(hsv, blueLower, blueUpper)
@@ -97,7 +105,7 @@ while True:
                             yindex = 0
 
                             paintWindow[67:, :, :] = 255
-                        if cx > 160 and cx < 255 and cy > 1 and cy < 65: # Blue
+                        if cx > 160 and cx < 255 and cy > 1 and cy < 65: # black
                             colourIndex = 0
                         elif cx > 275 and cx < 370 and cy > 1 and cy < 65: # Green
                             colourIndex = 1
@@ -146,6 +154,9 @@ while True:
 
     # if the 'q' key is pressed, stop the loop
     if cv2.waitKey(1) & 0xFF == ord("q"):
+        break
+    if cv2.waitKey(1) & 0xFF == ord("s"):
+        cv2.imwrite("signature.png", paintWindow)
         break
 
 # cleanup the camera and close any open windows
