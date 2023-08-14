@@ -3,19 +3,15 @@ import mediapipe as mp
 import time
 import numpy as np
 from collections import deque
+from pathlib import Path
+
+downloads_path = str(Path.home() / "Downloads")
 
 cap = cv2.VideoCapture(0)
 
 mpHands = mp.solutions.hands
 hands = mpHands.Hands()
 mpDraw = mp.solutions.drawing_utils
-
-pTime = 0
-cTime = 0
-
-# define the upper and lower boundaries for a color to be considered "blue"
-blueLower = np.array([100, 60, 60])
-blueUpper = np.array([140, 255, 255])
 
 # define a 5x5 kernel for erosion and dilation
 kernel = np.ones((5, 5), np.uint8)
@@ -32,7 +28,7 @@ gindex = 0
 rindex = 0
 yindex = 0
 
-# colours in BGR format
+# colours in BGRA format
 colours = [(0, 0, 0, 255), (0, 255, 0, 255), (0, 0, 255, 255), (0, 255, 255, 255)]
 colourIndex = 0
 
@@ -64,19 +60,13 @@ while True:
     img = cv2.rectangle(img, (390, 1), (485, 65), colours[2], -1)
     img = cv2.rectangle(img, (505, 1), (600, 65), colours[3], -1)
     cv2.putText(img, "CLEAR ALL", (49, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-    cv2.putText(img, "BLUE", (185, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+    cv2.putText(img, "BLACK", (185, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
     cv2.putText(img, "GREEN", (298, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
     cv2.putText(img, "RED", (420, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
     cv2.putText(img, "YELLOW", (520, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (150, 150, 150), 2, cv2.LINE_AA)
 
     # add a caption that says press 'q' to quit
     cv2.putText(img, "Press 'cmd q' to quit / 'cmd s' to save", (10, 450), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 2, cv2.LINE_AA)
-
-    # determine which pixels fall within the blue boundaries and then blur the binary image
-    blueMask = cv2.inRange(hsv, blueLower, blueUpper)
-    blueMask = cv2.erode(blueMask, kernel, iterations=2)
-    blueMask = cv2.morphologyEx(blueMask, cv2.MORPH_OPEN, kernel)
-    blueMask = cv2.dilate(blueMask, kernel, iterations=1)
 
     if results.multi_hand_landmarks:
         for handLms in results.multi_hand_landmarks:
@@ -156,7 +146,9 @@ while True:
     if cv2.waitKey(1) & 0xFF == ord("q"):
         break
     if cv2.waitKey(1) & 0xFF == ord("s"):
-        cv2.imwrite("signature.png", paintWindow)
+        # save image to downloads folder
+        cv2.imwrite(downloads_path + "/signature.png", paintWindow)
+        # TODO: copy image to clipboard ???
         break
 
 # cleanup the camera and close any open windows
