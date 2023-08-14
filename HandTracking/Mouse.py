@@ -60,7 +60,7 @@ wScr, hScr = autopy.screen.size()
 
 cap = cv2.VideoCapture(0)
 
-detector = htm.handDetector(detectionCon=0.8,maxHands=1)
+detector = htm.handDetector(maxHands=1)
 tipIds = [4,8,12,16,20]
 while True:
     root.mainloop()
