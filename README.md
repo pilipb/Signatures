@@ -4,7 +4,16 @@ The idea is to produce a standalone executable, or plugin for documents that all
 
 ## How to use
 
-Run drawWithFinger.py
+Run drawWithFinger.py or fingerSign.py
+    
+    ```bash
+    python drawWithFinger.py
+    ```
+    
+    ```bash
+    python fingerSign.py
+    ```
+
 
 Draw with index finger, turn off pen by closing fist, turn on pen by opening fist.
 
