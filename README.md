@@ -6,11 +6,11 @@ The idea is to produce a standalone executable, or plugin for documents that all
 
 Run drawWithFinger.py or fingerSign.py
     
-    ```bash
+    ```
     python drawWithFinger.py
     ```
     
-    ```bash
+    ```
     python fingerSign.py
     ```
 
@@ -19,5 +19,10 @@ Draw with index finger, turn off pen by closing fist, turn on pen by opening fis
 
 When done press 'q' or cmd + q to quit.
 press 's' to save the image to the downloads folder.
+
+
+### Note
+
+In trying to develop a packaged app / executable, an error was found with mediapipe dependencies in `pyinstaller` meaning that this was unsuccessful.
 
  
