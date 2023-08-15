@@ -6,11 +6,11 @@ The idea is to produce a standalone executable, or plugin for documents that all
 
 Run drawWithFinger.py or fingerSign.py
     
-    ```bash
+    ```
     python drawWithFinger.py
     ```
     
-    ```bash
+    ```
     python fingerSign.py
     ```
 
