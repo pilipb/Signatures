@@ -5,6 +5,8 @@ The idea is to produce a standalone executable, or plugin for documents that all
 ## How to use
 
 Run drawWithFinger.py or fingerSign.py
+
+darw with finger allows you draw with colours and gives you more controls, finger sign allows only signatures.
     
     ```
     python drawWithFinger.py
